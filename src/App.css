@@ -143,6 +143,7 @@ h5{
   display: block;
   width: 100%;
   bottom: 0;
+  position: absolute;
 }
 .results{
   
@@ -152,6 +153,9 @@ h5{
   margin: auto;
   width: 60%;
 }
+
+
+
 
 
 /*@mixin glitchCopy { 

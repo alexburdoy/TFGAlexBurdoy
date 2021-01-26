@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -32,31 +33,20 @@ function App() {
   }
   //Linia 46 afegir classe nav per fer el nav amb les categories
   return (
-
+ 
     <div className="App">
       <Router>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fontstyle">
 
           <a class="navbar-brand  cursor" href="/">
-            <img src={logo} height="50" className="d-inline-block align-top" alt="" loading="lazy" ></img>
+            <img src={logo} height="50" className="d-inline-block align-top glitch" alt="" loading="lazy" ></img>
 
           </a>
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <Categories></Categories>
-              <li class="nav-item ">
-                <a class="nav-link" href="#">Home </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " href="#">Disabled</a>
-              </li>
-            </ul>
+
+            <Categories></Categories>
+
+
           </div>
 
           <form className="form-inline" onSubmit={searchMovies}>
@@ -76,9 +66,16 @@ function App() {
 
 
       </Router>
-      <footer className="footer mt-auto py-3 bg-dark displayBlock">
-        <div className="container">
-          <span className="text-muted footerText">Àlex Burdoy, Josep Vílchez i Martí Peña</span>
+      <footer className="footer mt-auto  bg-dark displayBlock">
+        <div class="container text-center p-1">
+          <a href="https://twitter.com/alex_burdoy" class="fab fa-twitter px-1"></a>
+          <a href="https://www.instagram.com/germadelalaia" class="fab fa-instagram px-1"></a>
+          <a href="https://github.com/alexburdoy/" class="fab fa-github px-1"></a>
+          <a href="https://www.youtube.com/channel/UC2luRv7xsGxDobJ3HXYU4Sg" class="fab fa-youtube px-1"></a>
+        </div>
+
+        <div class="container text-center py-1 textWhite">
+          © Àlex Burdoy
         </div>
       </footer>
     </div>
@@ -86,6 +83,61 @@ function App() {
   );
 }
 
+class Categories extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      categories: [],
+
+
+    }
+
+  }
+
+  componentDidMount() {
+    const url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/categories_JSON.php";
+    console.log(url);
+
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          categories: json.categories
+        });
+      });
+
+  }
+
+
+  render() {
+
+    return (
+      <ul class="navbar-nav">{this.state.categories.map((category, idx) =>
+        <Category key={idx} categoryName={category}></Category>
+      )}
+      </ul>
+    );
+  }
+}
+
+class Category extends React.Component {
+  constructor(props) {
+    super();
+  }
+
+
+  render() {
+    let info = this.props.categoryName;
+    //console.log('https://image.tmdb.org/t/p/w500' + info.backdrop_path);
+
+
+    return (
+      <li class="nav-item ">
+        <a class="nav-link glitch" href="#">{info.name}</a>
+      </li>
+    );
+  }
+}
 
 
 class WorksList extends React.Component {
