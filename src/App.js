@@ -43,7 +43,7 @@ function App() {
           </a>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-
+              <Categories></Categories>
               <li class="nav-item ">
                 <a class="nav-link" href="#">Home </a>
               </li>

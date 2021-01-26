@@ -1,4 +1,5 @@
 <?
+	header('Access-Control-Allow-Origin: *');
 	require_once("conexionPDO.php");
 	
 	$db = new Conexion();
