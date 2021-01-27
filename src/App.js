@@ -175,6 +175,31 @@ class WorksList extends React.Component {
             <h1 class="hero-heading second">SIMPLICITY IS KEY </h1>
             <h1 class="hero-heading second">  SIMPLICITY IS KEY</h1>
           </div>
+          <div class="hero-slider w-slider">
+            <div class="hero-slider-mask w-slider-mask">
+              <div class="hero-slide w-slide">
+                <div class="container-heading-slider">
+                  <div class="whapper-heading-slide">
+                    <div class="overflow">
+                      <div class="sub-heading">
+                        Make it simple
+                      </div>
+                      <div class="bakground"></div>
+
+                    </div>
+                    <div class="overflow">
+                      <div class="heading">
+                        But significant
+                      </div>
+                      <div class="bakground"></div>
+
+                    </div>
+                  </div>
+                  <div class="background-first-slide"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="cosPagina py-3">
           <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>

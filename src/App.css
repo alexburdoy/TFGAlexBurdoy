@@ -172,7 +172,7 @@ h5{
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  animation: slideLateral 30s infinite linear;
+  
   will-change: auto;
 }
 @keyframes slideLateral {
@@ -181,7 +181,7 @@ h5{
  }
   
   100% {
-    transform: translate3d(-75%,0px,0px);
+    transform: translate3d(-100%,0px,0px);
  }
 }
 .hero-heading {
@@ -214,6 +214,8 @@ h5{
   background-clip: padding-box;
   -o-object-fit: cover;
   object-fit: cover;
+  animation: slideLateral 30s infinite linear;
+  letter-spacing: 0rem;
 }
 .hero-heading.second {
   position: static;
@@ -233,9 +235,134 @@ h5{
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.hero-slider {
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+}
 
+.hero-slide {
+  position: relative;
+  left: 0%;
+  top: 0%;
+  right: 0%;
+  bottom: 0%;
+  width: 100vw;
+  height: 100vh;
+}
+.w-slider{
+  position:relative;
+  height:300px;
+  text-align:center;
+  background:#dddddd;
+  clear:both;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  tap-highlight-color:rgba(0,0,0,0);
+}
+.w-slider-mask{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  z-index:1;
+  left:0;
+  right:0;
+  height:100%;
+  white-space:nowrap
+}
+.w-slide{
+  position:relative;
+  display:inline-block;
+  vertical-align:top;
+  width:100%;
+  height:100%;
+  white-space:normal;
+  text-align:left
+}
 
+.container-heading-slider {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  padding-left: 0px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
 
+.whapper-heading-slide {
+  position: absolute;
+  left: 0%;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  z-index: 980;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 16.66%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+.container-heading-slider {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  padding-left: 0px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.overflow {
+  position: relative;
+  overflow: hidden;
+  margin-right: 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+.sub-heading {
+  margin-left: 4px;
+  font-family: 'Bebas Neue', sans-serif;
+  color: hsla(0, 0%, 100%, 0.84);
+  font-size: 1vw;
+  font-weight: 100;
+  letter-spacing: 6px;
+}
+.bakground {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  right: 0%;
+  bottom: 0%;
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
 
 
 /*@mixin glitchCopy { 
