@@ -33,7 +33,7 @@ function App() {
   }
   //Linia 46 afegir classe nav per fer el nav amb les categories
   return (
- 
+
     <div className="App">
       <Router>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fontstyle">
@@ -170,8 +170,14 @@ class WorksList extends React.Component {
 
     return (
       <div>
-        <div className="cosPagina">
-          <div className="row row-cols-1 row-cols-md-5 p-3">{this.state.works.map((work, idx) =>
+        <div id='hero' className="hero-section">
+          <div class="wrapper-move-heading">
+            <h1 class="hero-heading second">SIMPLICITY IS KEY </h1>
+            <h1 class="hero-heading second">  SIMPLICITY IS KEY</h1>
+          </div>
+        </div>
+        <div className="cosPagina py-3">
+          <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
             <Work key={idx} workInfo={work}></Work>
           )}
           </div>
@@ -369,7 +375,7 @@ class ProductionCompanies extends React.Component {
 
 
     return (
-      <div class="col-lg-3 bgProdCard m-1 p-3">
+      <div class="col-lg-3 Card m-1 p-3">
         <img class="bd-placeholder-img" src={'https://image.tmdb.org/t/p/w500' + info.logo_path} width="100"></img>
         <h5 class="pt-3">{info.name}</h5>
         <p><strong>Country: </strong>{info.origin_country}</p>
