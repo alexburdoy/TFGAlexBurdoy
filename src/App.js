@@ -10,18 +10,22 @@ import {
   Link
 } from "react-router-dom";
 
+/*
+<form className="form-inline" action={"https://citmalumnes.upc.es/~alexbm1/TFG/data/cercaWorks.php"} method={'GET'}>
+  <input class="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="query" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
+  <input class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="submit" value="Search"></input>
+</form>
+*/
 function App() {
-
-
 
   const [query, setQuery] = useState('');
 
-  const searchMovies = async (e) => {
+  const searchWork = async (e) => {
     e.preventDefault();
 
     //const query="hola";
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=f37c16e288bd47f8c2026f6fdc704e57&language=en-US&query=${query}`;
-    //const url = "https://api.themoviedb.org/3/trending/movie/week?api_key=f37c16e288bd47f8c2026f6fdc704e57&page=1";
+    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/cercaWorks.php?query=${query}`;
+    console.log(url);
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -31,7 +35,7 @@ function App() {
     }
 
   }
-  //Linia 46 afegir classe nav per fer el nav amb les categories
+
   return (
 
     <div className="App">
@@ -49,11 +53,13 @@ function App() {
 
           </div>
 
-          <form className="form-inline" onSubmit={searchMovies}>
 
-            <input class="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="movieSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
 
-            <a class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/movieSearch/' + query}>Search</a>
+          <form className="form-inline" onSubmit={searchWork}>
+
+            <input class="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="workSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
+
+            <a class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/workSearch/' + query}>Search</a>
 
 
           </form>
@@ -61,8 +67,9 @@ function App() {
         </nav>
 
         <Route exact path="/" component={WorksList} />
-        <Route exact path="/movieSearch/:query" component={MovieSearch} />
+        <Route exact path="/workSearch/:query" component={MovieSearch} />
         <Route exact path="/category/:categoryID" component={CategoryWorks} />
+        <Route exact path="/user/:userEmail" component={UserWorks} />
         <Route exact path="/work/:workID" component={WorkDetails} />
 
 
@@ -213,7 +220,7 @@ class WorksList extends React.Component {
           </div>
         </div>
         <div className="cosPagina p-5 mt-2 mb-5">
-          <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
+          <div className="row row-cols-1 row-cols-md-4 ">{this.state.works.map((work, idx) =>
             <Work key={idx} workInfo={work}></Work>
           )}
           </div>
@@ -244,8 +251,12 @@ class Work extends React.Component {
             <Link to={'/work/' + info.id}>
               <h5 className="card-title title">{info.name}</h5>
               <p className="card-text">{info.description}</p>
-              <p className="card-text"><small className="text-muted">{info.user}</small><br></br><small className="text-muted">{info.data}</small></p>
             </Link>
+            <a href={'/user/' + info.user}>
+              <p className="card-text"><small className="text-muted email">{info.user}</small></p>
+            </a>
+            <p className="card-text"><small className="text-muted">{info.data}</small></p>
+
           </div>
         </div>
 
@@ -342,7 +353,7 @@ class CategoryWorks extends React.Component {
         });
       });
 
-      fetch(url2)
+    fetch(url2)
       .then(response => response.json())
       .then(json => {
         this.setState({
@@ -359,7 +370,50 @@ class CategoryWorks extends React.Component {
           <CatName key={idx} catInfo={category}></CatName>
         )}
         </div>
-        <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
+        <div className="row row-cols-1 row-cols-md-4 ">{this.state.works.map((work, idx) =>
+          <Work key={idx} workInfo={work}></Work>
+        )}
+        </div>
+      </div>
+    );
+  }
+}
+
+class UserWorks extends React.Component {
+  constructor({ match, location }) {
+    super();
+    this.state = {
+      userEmail: match.params.userEmail,
+      works: [],
+      categories: [],
+
+    }
+    console.log(JSON.stringify(match));
+
+  }
+
+
+  componentDidMount() {
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/" + this.state.userEmail + ".php";
+    console.log(url);
+    console.log(this.state.userEmail);
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          works: json.works,
+        });
+      });
+
+    
+
+  }
+
+  render() {
+    return (
+      <div className="cosPagina py-3 mx-5 mt-4">
+        <h1 className="pl-3 detailsTitle mb-4">{this.state.userEmail}</h1>
+        <div className="row row-cols-1 row-cols-md-4 ">{this.state.works.map((work, idx) =>
           <Work key={idx} workInfo={work}></Work>
         )}
         </div>
@@ -464,97 +518,59 @@ class Detail extends React.Component {
     );
   }
 }
-
-
 class MovieSearch extends React.Component {
-  //https://api.themoviedb.org/3/movie/${this.props.movieID}?api_key=f37c16e288bd47f8c2026f6fdc704e57
+
   constructor(props) {
     super();
     this.state = {
-      movies: [],
-      page: 1,
+      results: [],
 
     }
 
   }
 
   componentDidMount() {
-    this.makeHttpRequestWithPage(1);
-
-  }
-
-  makeHttpRequestWithPage = async pageNumber => {
-    if (pageNumber <= 1) {
-      pageNumber = 1;
-    }
-    fetch(`https://api.themoviedb.org/3/search/movie?api_key=f37c16e288bd47f8c2026f6fdc704e57&language=en-US&query=${this.props.match.params.query}&page=` + pageNumber)
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/cercaWorks.php?query=" + this.props.match.params.query
+    console.log(url);
+    fetch(url)
       .then(response => response.json())
       .then(json => {
         this.setState({
-          movies: json.results,
-          page: json.page,
+          results: json.results,
+
+
 
         });
       });
 
   }
+
   render() {
 
-    let renderPageNumbers;
-    const pageNumbers = [];
-    if (this.state.total !== null) {
-      for (let i = 1; i <= 5; i++) {
-        pageNumbers.push(i);
-      }
-
-      renderPageNumbers = pageNumbers.map(number => {
-        let classes = this.state.page === number ? 'activePage' : 'pages';
-
-        return (
-          <li class="page-item">
-            <a className={classes} onClick={() => this.makeHttpRequestWithPage(number)}>
-              <span key={number}>{number}</span>
-            </a>
-          </li>
-        );
-      });
-    }
 
     return (
       <div>
 
         <div className="cosPagina">
-          <div class="row featurette mt-2 px-3">
-            <div class="col-md-2 order-md-1">
-              <a class="btn btn-danger my-4 my-sm-2 navbar-form" href="/" type="button" >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
-                </svg>
+          <div className="mx-2 mt-5">
+            <div class="row featurette mt-2 px-3">
+              <div class="col-md-1 order-md-1">
+                <a class="btn btn-danger my-4 my-sm-2 navbar-form borderRadius" href="/" type="button" >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                  </svg>
                  Back</a>
-            </div>
-            <div class="col-md-10 order-md-2 vertCenter">
-              <h5 class="results">Results for: {this.props.match.params.query}</h5>
+              </div>
+              <div class="col-md-11 order-md-2 vertCenter">
+                <h1 class="results">Results for: {this.props.match.params.query}</h1>
+              </div>
             </div>
           </div>
-          <div className="row row-cols-1 row-cols-md-5 p-3">{this.state.movies.map((work, idx) =>
+          <div className="row row-cols-1 row-cols-md-5 p-3">{this.state.results.map((work, idx) =>
             <Work key={idx} workInfo={work}></Work>
           )}
           </div>
-          <ul class="pagination centerPagination">
-            <li class="page-item">
-              <a class="page-link pages" onClick={() => this.makeHttpRequestWithPage((this.state.page - 1))} aria-label="Previous">
-                <span aria-hidden="true">«</span>
-              </a>
-            </li>
 
-            {renderPageNumbers}
-
-            <li class="page-item">
-              <a class="page-link pages" aria-label="Next" onClick={() => this.makeHttpRequestWithPage((this.state.page + 1))}>
-                <span aria-hidden="true">»</span>
-              </a>
-            </li>
-          </ul>
 
         </div>
 
@@ -565,6 +581,8 @@ class MovieSearch extends React.Component {
 
 
 }
+
+
 
 
 

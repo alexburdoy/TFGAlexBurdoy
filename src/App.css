@@ -92,6 +92,9 @@ p{
 h5{
   color: white;
 }
+.email{
+  color: rgb(84, 122, 144) !important;
+}
 .borderRadius{
   border-radius: 0.65em;
 }
@@ -134,7 +137,8 @@ h5{
    width: 100%;
 }
 .results{
-  
+  font-weight: 600;
+  color: white;
   text-align: start;
 }
 .vertCenter{
