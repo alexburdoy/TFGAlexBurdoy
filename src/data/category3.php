@@ -6,7 +6,7 @@
 	$db = new Conexion();
 
 	$dbTabla='TFGWorks';
-	$consulta = "SELECT * FROM $dbTabla ORDER BY data DESC";
+	$consulta = "SELECT * FROM $dbTabla WHERE categoria=3";
 	$result = $db->prepare($consulta);
 	$result->execute();
 	
@@ -16,7 +16,7 @@
 		$works = array();
 		echo '{"works":';
 		foreach($result as $valor){
-				$arr = array('id' => $valor['id'], 'name' => $valor['name'], 'description' => $valor['description'], 'imgURL' => $valor['imgURL'], 'user' => $valor['user'], 'categoria' => $valor['categoria'], 'data' => $valor['data'] );
+				$arr = array('id' => $valor['id'], 'name' => $valor['name'], 'description' => $valor['description'], 'imgURL' => $valor['imgURL'], 'user' => $valor['user'], 'categoria' => $valor['categoria'] );
 				//echo json_encode($arr).",\n"; 
 				array_push($works, $arr);
 		}

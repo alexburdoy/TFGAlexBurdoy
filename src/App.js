@@ -51,7 +51,7 @@ function App() {
 
           <form className="form-inline" onSubmit={searchMovies}>
 
-            <input class="form-control mr-sm-2 navbar-form" type="search" aria-label="Search" id="movieSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search a movie"></input>
+            <input class="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="movieSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
 
             <a class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/movieSearch/' + query}>Search</a>
 
@@ -62,6 +62,7 @@ function App() {
 
         <Route exact path="/" component={WorksList} />
         <Route exact path="/movieSearch/:query" component={MovieSearch} />
+        <Route exact path="/category/:categoryID" component={CategoryWorks} />
 
 
 
@@ -133,7 +134,9 @@ class Category extends React.Component {
 
     return (
       <li class="nav-item ">
-        <a class="nav-link glitch" href="#">{info.name}</a>
+
+        <a class="nav-link glitch" href={'/category/' + info.id}>{info.name}</a>
+
       </li>
     );
   }
@@ -172,8 +175,8 @@ class WorksList extends React.Component {
       <div>
         <div id='hero' className="hero-section">
           <div class="wrapper-move-heading">
-            <h1 class="hero-heading second">SIMPLICITY IS KEY </h1>
-            <h1 class="hero-heading second">  SIMPLICITY IS KEY</h1>
+            <h1 class="hero-heading second">PORTAFOLIS </h1>
+            <h1 class="hero-heading second">  PORTAFOLIS</h1>
           </div>
           <div class="hero-slider w-slider">
             <div class="hero-slider-mask w-slider-mask">
@@ -182,26 +185,33 @@ class WorksList extends React.Component {
                   <div class="whapper-heading-slide">
                     <div class="overflow">
                       <div class="sub-heading">
-                        Make it simple
+                        PLATAFORMA MULTIMÈDIA
                       </div>
                       <div class="bakground"></div>
 
                     </div>
                     <div class="overflow">
                       <div class="heading">
-                        But significant
+                        TREBALLS RECOMANATS
                       </div>
                       <div class="bakground"></div>
 
                     </div>
                   </div>
-                  <div class="background-first-slide"></div>
+                  <div class="slideRecomanats">
+                    <div class="background-first-slide"></div>
+                    <div class="background-second-slide"></div>
+                    <div class="background-third-slide"></div>
+                    <div class="background-first-slide"></div>
+                  </div>
+
                 </div>
               </div>
+
             </div>
           </div>
         </div>
-        <div className="cosPagina py-3">
+        <div className="cosPagina p-5 mt-2 mb-5">
           <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
             <Work key={idx} workInfo={work}></Work>
           )}
@@ -226,16 +236,18 @@ class Work extends React.Component {
 
       <div className="col mb-4">
 
-        <Link to={'/movie/' + info.id}>
-          <div className="card bgCard" id={info.id}>
-            <img src={'https://citmalumnes.upc.es/~alexbm1/TFG/img/' + info.imgURL} className="card-img-top p-3" alt={info.name}></img>
+
+        <div className="card bgCard" id={info.id}>
+          <CategoryCard idCat={info.categoria}></CategoryCard>
+          <Link to={'/work/' + info.id}>
             <div className="card-body">
               <h5 className="card-title title">{info.name}</h5>
               <p className="card-text">{info.description}</p>
-              <p className="card-text"><small className="text-muted">{info.user}</small></p>
+              <p className="card-text"><small className="text-muted">{info.user}</small><br></br><small className="text-muted">{info.data}</small></p>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
+
 
 
 
@@ -244,55 +256,71 @@ class Work extends React.Component {
     );
   }
 }
+class CategoryCard extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      categories: [],
 
-/*
-class Movie extends React.Component {
+
+    }
+
+  }
+
+  componentDidMount() {
+    const url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat" + this.props.idCat + ".php";
+    console.log(url);
+    console.log(this.props.idCat);
+
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          categories: json.categories
+        });
+      });
+
+  }
+
+
+  render() {
+
+    return (
+      <div class="divCategoryCard">{this.state.categories.map((category, idx) =>
+        <CategoryName key={idx} categoryName={category} />
+      )}
+      </div>
+    );
+  }
+}
+class CategoryName extends React.Component {
   constructor(props) {
     super();
   }
 
 
   render() {
-    let info = this.props.movie;
-    //console.log('https://image.tmdb.org/t/p/w500' + info.backdrop_path);
+    let info = this.props.categoryName;
+
 
 
     return (
 
-      <div className="col mb-4">
-
-        <Link to={'/movie/' + info.id}>
-          <div className="card bgCard" id={info.id}>
-            <img src={'https://image.tmdb.org/t/p/w500' + info.backdrop_path} className="card-img-top" alt={info.original_title}></img>
-            <div className="card-body">
-              <h5 className="card-title title">{info.original_title}</h5>
-              <p className="card-text">{info.overview}</p>
-              <p className="card-text"><small className="text-muted">{info.release_date}</small></p>
-            </div>
-          </div>
-        </Link>
-
-
-
-      </div>
+      <a href={'/category/' + info.id}>
+        <h5 class="cursor categoryCard">{info.name}</h5>
+      </a>
 
     );
   }
 }
 
-class MovieDetails extends React.Component {
-  //https://api.themoviedb.org/3/movie/${this.props.movieID}?api_key=f37c16e288bd47f8c2026f6fdc704e57
+class CategoryWorks extends React.Component {
   constructor({ match, location }) {
     super();
     this.state = {
-      img: [],
-      idFilm: match.params.movieID,
-      title: [],
-      genres: [],
-      overview: [],
-      homepage: [],
-      production_companies: [],
-      production_countries: []
+      idCategory: match.params.categoryID,
+      works: [],
+
     }
     console.log(JSON.stringify(match));
 
@@ -300,20 +328,14 @@ class MovieDetails extends React.Component {
 
 
   componentDidMount() {
-    let url = "https://api.themoviedb.org/3/movie/" + this.state.idFilm + "?api_key=f37c16e288bd47f8c2026f6fdc704e57";
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/category" + this.state.idCategory + ".php";
     console.log(url);
-    console.log(this.state.idFilm);
+    console.log(this.state.idCategory);
     fetch(url)
       .then(response => response.json())
       .then(json => {
         this.setState({
-          img: json.backdrop_path,
-          title: json.original_title,
-          genres: json.genres,
-          overview: json.overview,
-          homepage: json.homepage,
-          production_companies: json.production_companies,
-          production_countries: json.production_countries
+          works: json.works
         });
       });
 
@@ -321,113 +343,16 @@ class MovieDetails extends React.Component {
 
   render() {
     return (
-
-      <div className="cosPagina">
-        <div class="row featurette mt-2 px-3">
-          <div class="col-md-7 order-md-2">
-            <a class="btn btn-danger my-4 my-sm-2 navbar-form" href="/" type="button" >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
-              </svg>
-                 Back</a>
-          </div>
-        </div>
-
-        <div class="row featurette mt-2 px-3">
-          <div class="col-md-7 order-md-2">
-            <h2 class="featurette-heading textWhite title">{this.state.title}</h2>
-            <p class="lead">{this.state.overview}</p>
-            <br></br><br></br><br></br>
-            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-              <p>Genres: {this.state.genres.map((genre, idx) =>
-                <Genre key={idx} genreName={genre}></Genre>
-              )}
-              </p>
-              <a type="button" href={this.state.homepage} class="btn btn-outline-info">Movie Homepage</a>
-            </div>
-          </div>
-          <div class="col-md-5 order-md-2">
-            <img src={'https://image.tmdb.org/t/p/w500' + this.state.img} className="imgStyle"></img>
-          </div>
-        </div>
-        <br></br>
-        <hr class="featurette-divider hrStyle"></hr>
-        <h4 class="ml-5 pl-5 featurette-heading textWhite title">Production Companies</h4>
-        <div class="row m-2 justify-content-center">
-
-          {this.state.production_companies.map((company, idx) => <ProductionCompanies key={idx} companyInfo={company}></ProductionCompanies>)}
-
-        </div>
-        <hr class="featurette-divider hrStyle"></hr>
-        <h4 class="ml-5 pl-5 featurette-heading textWhite title">Production Coutries</h4>
-        <div class="m-2">
-
-          {this.state.production_countries.map((country, idx) => <ProductionCountries key={idx} countryName={country}></ProductionCountries>)}
-
+      <div className="cosPagina py-3">
+        <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
+          <Work key={idx} workInfo={work}></Work>
+        )}
         </div>
       </div>
     );
   }
 }
 
-class Genre extends React.Component {
-  constructor(props) {
-    super();
-  }
-
-  render() {
-    let info = this.props.genreName;
-
-
-
-    return (
-
-      <em>|{info.name}| </em>
-
-    );
-  }
-
-}
-
-class ProductionCompanies extends React.Component {
-  constructor(props) {
-    super();
-  }
-
-  render() {
-    let info = this.props.companyInfo;
-
-
-
-    return (
-      <div class="col-lg-3 Card m-1 p-3">
-        <img class="bd-placeholder-img" src={'https://image.tmdb.org/t/p/w500' + info.logo_path} width="100"></img>
-        <h5 class="pt-3">{info.name}</h5>
-        <p><strong>Country: </strong>{info.origin_country}</p>
-
-      </div>
-    );
-  }
-
-}
-
-class ProductionCountries extends React.Component {
-  constructor(props) {
-    super();
-  }
-
-  render() {
-    let info = this.props.countryName;
-
-
-
-    return (
-      <p class="center"><em>|{info.name}| </em></p>
-    );
-  }
-
-}
-*/
 class MovieSearch extends React.Component {
   //https://api.themoviedb.org/3/movie/${this.props.movieID}?api_key=f37c16e288bd47f8c2026f6fdc704e57
   constructor(props) {
