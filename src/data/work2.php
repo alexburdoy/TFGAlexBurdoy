@@ -6,7 +6,7 @@
 	$db = new Conexion();
 
 	$dbTabla='TFGWorks';
-	$consulta = "SELECT * FROM $dbTabla WHERE categoria=3";
+	$consulta = "SELECT * FROM $dbTabla WHERE id=2";
 	$result = $db->prepare($consulta);
 	$result->execute();
 	

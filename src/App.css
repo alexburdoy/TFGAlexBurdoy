@@ -73,13 +73,17 @@
   box-shadow: 2px 2px 0px rgb(62, 70, 86);
   cursor: pointer;
 }
-.divCategoryCard{
-  padding-left: 1.25em;
-  padding-top: 1.25em;
-}
+
 .categoryCard{
   color: rgb(50, 177, 189);
   font-weight: 500;
+}
+.detailsImg{
+ width: 100%;
+}
+.detailsTitle{
+  font-weight: 700;
+  color: white;
 }
 
 p{

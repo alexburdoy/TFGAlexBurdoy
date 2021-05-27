@@ -63,6 +63,7 @@ function App() {
         <Route exact path="/" component={WorksList} />
         <Route exact path="/movieSearch/:query" component={MovieSearch} />
         <Route exact path="/category/:categoryID" component={CategoryWorks} />
+        <Route exact path="/work/:workID" component={WorkDetails} />
 
 
 
@@ -238,14 +239,14 @@ class Work extends React.Component {
 
 
         <div className="card bgCard" id={info.id}>
-          <CategoryCard idCat={info.categoria}></CategoryCard>
-          <Link to={'/work/' + info.id}>
-            <div className="card-body">
+          <div className="card-body">
+            <CategoryCard idCat={info.categoria}></CategoryCard>
+            <Link to={'/work/' + info.id}>
               <h5 className="card-title title">{info.name}</h5>
               <p className="card-text">{info.description}</p>
               <p className="card-text"><small className="text-muted">{info.user}</small><br></br><small className="text-muted">{info.data}</small></p>
-            </div>
-          </Link>
+            </Link>
+          </div>
         </div>
 
 
@@ -286,7 +287,7 @@ class CategoryCard extends React.Component {
   render() {
 
     return (
-      <div class="divCategoryCard">{this.state.categories.map((category, idx) =>
+      <div >{this.state.categories.map((category, idx) =>
         <CategoryName key={idx} categoryName={category} />
       )}
       </div>
@@ -320,6 +321,7 @@ class CategoryWorks extends React.Component {
     this.state = {
       idCategory: match.params.categoryID,
       works: [],
+      categories: [],
 
     }
     console.log(JSON.stringify(match));
@@ -328,7 +330,78 @@ class CategoryWorks extends React.Component {
 
 
   componentDidMount() {
+    let url2 = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat" + this.state.idCategory + ".php";
     let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/category" + this.state.idCategory + ".php";
+    console.log(url);
+    console.log(this.state.idCategory);
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          works: json.works,
+        });
+      });
+
+      fetch(url2)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          categories: json.categories,
+        });
+      });
+
+  }
+
+  render() {
+    return (
+      <div className="cosPagina py-3 mx-5 mt-4">
+        <div>{this.state.categories.map((category, idx) =>
+          <CatName key={idx} catInfo={category}></CatName>
+        )}
+        </div>
+        <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
+          <Work key={idx} workInfo={work}></Work>
+        )}
+        </div>
+      </div>
+    );
+  }
+}
+
+class CatName extends React.Component {
+  constructor(props) {
+    super();
+  }
+
+
+  render() {
+    let info = this.props.catInfo;
+
+
+
+    return (
+
+      <h1 className="pl-3 detailsTitle mb-4">{info.name}</h1>
+
+    );
+  }
+}
+
+class WorkDetails extends React.Component {
+  constructor({ match, location }) {
+    super();
+    this.state = {
+      idWork: match.params.workID,
+      works: [],
+
+    }
+    console.log(JSON.stringify(match));
+
+  }
+
+
+  componentDidMount() {
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/work" + this.state.idWork + ".php";
     console.log(url);
     console.log(this.state.idCategory);
     fetch(url)
@@ -343,15 +416,55 @@ class CategoryWorks extends React.Component {
 
   render() {
     return (
-      <div className="cosPagina py-3">
-        <div className="row row-cols-1 row-cols-md-5 ">{this.state.works.map((work, idx) =>
-          <Work key={idx} workInfo={work}></Work>
+      <div className="cosPagina p-5 mt-2 mb-5">
+        <div>{this.state.works.map((work, idx) =>
+          <Detail key={idx} workInfo={work}></Detail>
         )}
         </div>
       </div>
     );
   }
 }
+
+class Detail extends React.Component {
+  constructor(props) {
+    super();
+  }
+
+
+  render() {
+    let info = this.props.workInfo;
+
+
+
+    return (
+      <div>
+        <h1 className="pl-3 detailsTitle mb-4">{info.name}</h1>
+        <div className="row row-cols-1 row-cols-md-2">
+          <div className="col mb-4">
+            <p className="card-text">{info.description}</p>
+            <p ><small className="text-muted">{info.user}</small><br></br><small className="text-muted">{info.data}</small></p>
+            <CategoryCard idCat={info.categoria}></CategoryCard>
+          </div>
+          <div className="col mb-4">
+            <img src={'https://citmalumnes.upc.es/~alexbm1/TFG/img/' + info.imgURL} className="detailsImg" alt={info.name}></img>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+
+
+
+
+
+    );
+  }
+}
+
 
 class MovieSearch extends React.Component {
   //https://api.themoviedb.org/3/movie/${this.props.movieID}?api_key=f37c16e288bd47f8c2026f6fdc704e57
