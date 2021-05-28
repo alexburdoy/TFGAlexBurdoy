@@ -405,7 +405,7 @@ class UserWorks extends React.Component {
         });
       });
 
-    
+
 
   }
 
@@ -497,7 +497,11 @@ class Detail extends React.Component {
         <div className="row row-cols-1 row-cols-md-2">
           <div className="col mb-4">
             <p className="card-text">{info.description}</p>
-            <p ><small className="text-muted">{info.user}</small><br></br><small className="text-muted">{info.data}</small></p>
+            <a href={'/user/' + info.user}>
+              <p className="card-text"><small className="text-muted email">{info.user}</small></p>
+            </a>
+            <p className="card-text"><small className="text-muted">{info.data}</small></p>
+
             <CategoryCard idCat={info.categoria}></CategoryCard>
           </div>
           <div className="col mb-4">
