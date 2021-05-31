@@ -4,8 +4,10 @@
 	
 	$db = new Conexion();
 
+	$name = $_GET["name"];
+
 	$dbTabla='TFGCategories';
-	$consulta = "SELECT * FROM $dbTabla WHERE id=2";
+	$consulta = "SELECT * FROM $dbTabla WHERE id=$name";
 	$result = $db->prepare($consulta);
 	$result->execute();
 	

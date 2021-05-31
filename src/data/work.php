@@ -5,8 +5,10 @@
 	
 	$db = new Conexion();
 
+	$id = $_GET["id"];
+
 	$dbTabla='TFGWorks';
-	$consulta = "SELECT * FROM $dbTabla WHERE id=1";
+	$consulta = "SELECT * FROM $dbTabla WHERE id=$id";
 	$result = $db->prepare($consulta);
 	$result->execute();
 	

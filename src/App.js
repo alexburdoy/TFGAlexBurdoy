@@ -71,10 +71,13 @@ function App() {
         <Route exact path="/category/:categoryID" component={CategoryWorks} />
         <Route exact path="/user/:userEmail" component={UserWorks} />
         <Route exact path="/work/:workID" component={WorkDetails} />
+        <Route exact path="/addWork" component={AddWork} />
+
 
 
 
       </Router>
+
       <footer className="footer mt-auto  bg-dark displayBlock">
         <div class="container text-center p-1">
           <a href="https://twitter.com/alex_burdoy" class="fab fa-twitter px-1"></a>
@@ -225,6 +228,7 @@ class WorksList extends React.Component {
           )}
           </div>
         </div>
+        <div className="m-5 pb-5 px-4 textCenter "><a className="btn btn-primary addButton borderRadius" href="/addWork">Add</a></div>
       </div>
     );
   }
@@ -280,7 +284,7 @@ class CategoryCard extends React.Component {
   }
 
   componentDidMount() {
-    const url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat" + this.props.idCat + ".php";
+    const url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat.php?name=" + this.props.idCat;
     console.log(url);
     console.log(this.props.idCat);
 
@@ -341,9 +345,10 @@ class CategoryWorks extends React.Component {
 
 
   componentDidMount() {
-    let url2 = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat" + this.state.idCategory + ".php";
-    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/category" + this.state.idCategory + ".php";
+    let url2 = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat.php?name=" + this.state.idCategory + ".php";
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/category.php?id=" + this.state.idCategory;
     console.log(url);
+    console.log(url2);
     console.log(this.state.idCategory);
     fetch(url)
       .then(response => response.json())
@@ -374,6 +379,7 @@ class CategoryWorks extends React.Component {
           <Work key={idx} workInfo={work}></Work>
         )}
         </div>
+        <div className=" pb-5 px-4 textCenter mt-5"><a className="btn btn-primary addButton borderRadius" href="/addWork">Add</a></div>
       </div>
     );
   }
@@ -394,7 +400,7 @@ class UserWorks extends React.Component {
 
 
   componentDidMount() {
-    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/" + this.state.userEmail + ".php";
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/user.php?email="+ this.state.userEmail;
     console.log(url);
     console.log(this.state.userEmail);
     fetch(url)
@@ -455,9 +461,9 @@ class WorkDetails extends React.Component {
 
 
   componentDidMount() {
-    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/work" + this.state.idWork + ".php";
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/work.php?id="+ this.state.idWork;
     console.log(url);
-    console.log(this.state.idCategory);
+    console.log(this.state.idWork);
     fetch(url)
       .then(response => response.json())
       .then(json => {
@@ -508,6 +514,7 @@ class Detail extends React.Component {
             <img src={'https://citmalumnes.upc.es/~alexbm1/TFG/img/' + info.imgURL} className="detailsImg" alt={info.name}></img>
           </div>
         </div>
+        <div className="commentContainer"></div>
 
 
       </div>
@@ -585,6 +592,121 @@ class MovieSearch extends React.Component {
 
 
 }
+
+function AddWork() {
+
+  let [query, setQuery] = useState('');
+  let [description, setDescription] = useState('');
+  let [imgURL, setImgURL] = useState('');
+  let [email, setEmail] = useState('');
+  let [category, setCategory] = useState('');
+
+  let searchWork = async (e, d, i) => {
+    //.preventDefault();
+    // d.preventDefault();
+    // i.preventDefault();
+
+    //const query="hola";
+    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/addWorks.php?name=${query}&description=${description}&imgUrl=${imgURL}&categoria=${category}&user=${email}`;
+    console.log(url);
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log(data);
+    } catch (er) {
+      console.log(er);
+    }
+
+  }
+
+
+
+
+  return (
+    <div>
+
+      <div className="cosPagina">
+        <div className="mx-5 mt-5">
+        <h1 className="pl-3 detailsTitle mb-4">Afegir Treball</h1>
+          <form onSubmit={searchWork} method="get">
+            <div className="form-row mx-5">
+              <div className="col-md-4 mb-12 my-2 p-2">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupPrepend2">Nom</span>
+                  </div>
+                  <input type="text" className="form-control borderRadius" id="workName" placeholder="Treball Multimedia" name="query" value={query} onChange={(e) => setQuery(e.target.value)} required></input>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-row mx-5">
+              <div className="col-md-4 mb-12 my-2 p-2">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupPrepend2">Descripció</span>
+                  </div>
+                  <input type="text" className="form-control borderRadius" id="workDescription" placeholder="Descripció" name="description" value={description} onChange={(d) => setDescription(d.target.value)} required></input>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-row mx-5">
+              <div className="col-md-4 mb-12 my-2 p-2">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupPrepend2">URL Imatge</span>
+                  </div>
+                  <input type="text" className="form-control borderRadius" id="workImgURL" placeholder="foto.jpg" name="imgURL" value={imgURL} onChange={(i) => setImgURL(i.target.value)} required></input>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-row mx-5">
+              <div className="col-md-4 mb-12 my-2 p-2">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupPrepend2">eMail</span>
+                  </div>
+                  <input type="text" className="form-control borderRadius" id="workImgURL" placeholder="alexburdoy@gmail.com" name="email" value={email} onChange={(m) => setEmail(m.target.value)} required></input>
+                </div>
+              </div>
+            </div>
+
+            <div className="form-row mx-5">
+              <div className="col-md-4 mb-12 my-2 p-2">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text" id="inputGroupPrepend2">Categoria</span>
+                  </div>
+                  <input type="number" className="form-control borderRadius" id="workImgURL" placeholder="Número Categoria" name="category" value={category} onChange={(c) => setCategory(c.target.value)} required></input>
+                </div>
+              </div>
+            </div>
+            
+            
+              <a class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton mx-5 p-2" type="button" value="Afegeix" onClick={searchWork} href="/">Afegeix</a>
+            
+            <div>
+            <h2 className="pl-3 detailsTitle my-4">Categories</h2>
+              <p className="pl-3 my-4">Programació = 1 | Disseny = 2 | VFX = 3 | 3D = 4</p>
+            </div>
+            <div>
+            <h2 className="pl-3 detailsTitle my-4">Imatges Disponibles</h2>
+              <p className="pl-3 my-4">programacio.png | disseny.jpg | vfx.jpg | 3d.jpg</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+
+
+
+
+}
+
+
 
 
 

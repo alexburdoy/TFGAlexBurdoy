@@ -85,7 +85,12 @@
   font-weight: 700;
   color: white;
 }
-
+.textCenter{
+  text-align: center;
+  justify-content: center !important;
+  align-items: center !important;
+  vertical-align: middle;
+}
 p{
   color: white;
 }
@@ -94,6 +99,17 @@ h5{
 }
 .email{
   color: rgb(84, 122, 144) !important;
+}
+.addButton{
+  background-color: rgb(50, 177, 189);
+  height: 5em;
+  width: 5em;
+  display: flex;
+  text-align: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700;
+  vertical-align: middle;
 }
 .borderRadius{
   border-radius: 0.65em;

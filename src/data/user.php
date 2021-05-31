@@ -5,8 +5,10 @@
 	
 	$db = new Conexion();
 
+	$email = $_GET["email"];
+
 	$dbTabla='TFGWorks';
-	$consulta = "SELECT * FROM $dbTabla WHERE user='alexburdoy@gmail.com'";
+	$consulta = "SELECT * FROM $dbTabla WHERE user='$email'";
 	$result = $db->prepare($consulta);
 	$result->execute();
 	
