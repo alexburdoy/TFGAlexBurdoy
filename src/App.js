@@ -8,7 +8,6 @@ import {
   Route,
   Link
 } from "react-router-dom";
-
 import firebaseAuth from './firebase-config';
 import { AuthProvider } from './Auth.js';
 import PrivateRoute from "./PrivateRoute";
@@ -25,12 +24,7 @@ function App() {
 
   const [query, setQuery] = useState('');
 
-  var user = firebase.auth().currentUser;
-  var emailUser;
-  if (user != null) {
-    emailUser = user.email;
-    console.log(emailUser);
-  }
+
 
   const searchWork = async (e) => {
     e.preventDefault();
@@ -248,7 +242,11 @@ class WorksList extends React.Component {
           )}
           </div>
         </div>
-        <div className="m-5 pb-5 px-4 textCenter "><a className="btn btn-primary addButton borderRadius" href="/addWork">Add</a></div>
+        <div className="m-5 pb-5 px-4 textCenter ">
+          <Link to="/addWork">
+            <a className="btn btn-primary addButton borderRadius" >Add</a>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -767,7 +765,7 @@ function AddWork() {
     // i.preventDefault();
 
     //const query="hola";
-    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/addWorks.php?name=${query}&description=${description}&imgUrl=${imgURL}&categoria=${category}&user=${emailUser}`;
+    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/addWork.php?name=${query}&description=${description}&imgUrl=${imgURL}&categoria=${category}&user=${emailUser}`;
     console.log(url);
     try {
       const res = await fetch(url);
@@ -788,7 +786,7 @@ function AddWork() {
       <div className="cosPagina">
         <div className="mx-5 mt-5">
           <h1 className="pl-3 detailsTitle mb-4">Afegir Treball al perfil de l'usuari {emailUser}</h1>
-          
+
           <form onSubmit={searchWork} method="get">
             <div className="form-row mx-5">
               <div className="col-md-4 mb-12 my-2 p-2">
@@ -834,9 +832,9 @@ function AddWork() {
               </div>
             </div>
 
-
-            <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton mx-5 p-2" type="button" value="Afegeix" onClick={searchWork} href="/">Afegeix</a>
-
+            <Link to="/">
+              <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton mx-5 p-2" type="button" value="Afegeix" onClick={searchWork}>Afegeix</a>
+            </Link>
             <div>
               <h2 className="pl-3 detailsTitle my-4">Categories</h2>
               <p className="pl-3 my-4">Programació = 1 | Disseny = 2 | VFX = 3 | 3D = 4</p>
