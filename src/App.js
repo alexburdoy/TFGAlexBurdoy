@@ -1,14 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
-
+import firebase from "firebase/app";
+import "firebase/auth";
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
   Link
 } from "react-router-dom";
+
+import firebaseAuth from './firebase-config';
+import { AuthProvider } from './Auth.js';
+import PrivateRoute from "./PrivateRoute";
+import Login from "./Login";
+import SignUp from "./SignUp";
 
 /*
 <form className="form-inline" action={"https://citmalumnes.upc.es/~alexbm1/TFG/data/cercaWorks.php"} method={'GET'}>
@@ -19,6 +24,13 @@ import {
 function App() {
 
   const [query, setQuery] = useState('');
+
+  var user = firebase.auth().currentUser;
+  var emailUser;
+  if (user != null) {
+    emailUser = user.email;
+    console.log(emailUser);
+  }
 
   const searchWork = async (e) => {
     e.preventDefault();
@@ -39,54 +51,62 @@ function App() {
   return (
 
     <div className="App">
-      <Router>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fontstyle">
+      <AuthProvider>
+        <Router>
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fontstyle">
 
-          <a class="navbar-brand  cursor" href="/">
-            <img src={logo} height="50" className="d-inline-block align-top glitch" alt="" loading="lazy" ></img>
+            <a className="navbar-brand  cursor" href="/">
+              <img src={logo} height="50" className="d-inline-block align-top glitch" alt="" loading="lazy" ></img>
 
-          </a>
-          <div class="collapse navbar-collapse" id="navbarNav">
+            </a>
+            <div className="collapse navbar-collapse" id="navbarNav">
 
-            <Categories></Categories>
-
-
-          </div>
+              <Categories></Categories>
 
 
-
-          <form className="form-inline" onSubmit={searchWork}>
-
-            <input class="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="workSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
-
-            <a class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/workSearch/' + query}>Search</a>
-
-
-          </form>
-
-        </nav>
-
-        <Route exact path="/" component={WorksList} />
-        <Route exact path="/workSearch/:query" component={MovieSearch} />
-        <Route exact path="/category/:categoryID" component={CategoryWorks} />
-        <Route exact path="/user/:userEmail" component={UserWorks} />
-        <Route exact path="/work/:workID" component={WorkDetails} />
-        <Route exact path="/addWork" component={AddWork} />
+            </div>
 
 
 
+            <form className="form-inline" onSubmit={searchWork}>
 
-      </Router>
+              <input className="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="workSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
+
+              <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/workSearch/' + query}>Search</a>
+
+
+            </form>
+            <Link to='/'>
+              <button className="btn btn-danger mx-2 searchButton" onClick={() => firebaseAuth.auth().signOut()} >Sign Out</button>
+            </Link>
+
+          </nav>
+
+
+          <PrivateRoute exact path="/" component={WorksList} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/workSearch/:query" component={MovieSearch} />
+          <Route exact path="/category/:categoryID" component={CategoryWorks} />
+          <Route exact path="/user/:userEmail" component={UserWorks} />
+          <Route exact path="/work/:workID" component={WorkDetails} />
+          <Route exact path="/addWork" component={AddWork} />
+
+
+
+
+        </Router>
+      </AuthProvider>
 
       <footer className="footer mt-auto  bg-dark displayBlock">
-        <div class="container text-center p-1">
-          <a href="https://twitter.com/alex_burdoy" class="fab fa-twitter px-1"></a>
-          <a href="https://www.instagram.com/germadelalaia" class="fab fa-instagram px-1"></a>
-          <a href="https://github.com/alexburdoy/" class="fab fa-github px-1"></a>
-          <a href="https://www.youtube.com/channel/UC2luRv7xsGxDobJ3HXYU4Sg" class="fab fa-youtube px-1"></a>
+        <div className="container text-center p-1">
+          <a href="https://twitter.com/alex_burdoy" className="fab fa-twitter px-1"></a>
+          <a href="https://www.instagram.com/germadelalaia" className="fab fa-instagram px-1"></a>
+          <a href="https://github.com/alexburdoy/" className="fab fa-github px-1"></a>
+          <a href="https://www.youtube.com/channel/UC2luRv7xsGxDobJ3HXYU4Sg" className="fab fa-youtube px-1"></a>
         </div>
 
-        <div class="container text-center py-1 textWhite">
+        <div className="container text-center py-1 textWhite">
           © Àlex Burdoy
         </div>
       </footer>
@@ -124,7 +144,7 @@ class Categories extends React.Component {
   render() {
 
     return (
-      <ul class="navbar-nav">{this.state.categories.map((category, idx) =>
+      <ul className="navbar-nav">{this.state.categories.map((category, idx) =>
         <Category key={idx} categoryName={category}></Category>
       )}
       </ul>
@@ -144,9 +164,9 @@ class Category extends React.Component {
 
 
     return (
-      <li class="nav-item ">
+      <li className="nav-item ">
 
-        <a class="nav-link glitch" href={'/category/' + info.id}>{info.name}</a>
+        <a className="nav-link glitch" href={'/category/' + info.id}>{info.name}</a>
 
       </li>
     );
@@ -185,35 +205,35 @@ class WorksList extends React.Component {
     return (
       <div>
         <div id='hero' className="hero-section">
-          <div class="wrapper-move-heading">
-            <h1 class="hero-heading second">PORTAFOLIS </h1>
-            <h1 class="hero-heading second">  PORTAFOLIS</h1>
+          <div className="wrapper-move-heading">
+            <h1 className="hero-heading second">PORTAFOLIS </h1>
+            <h1 className="hero-heading second">  PORTAFOLIS</h1>
           </div>
-          <div class="hero-slider w-slider">
-            <div class="hero-slider-mask w-slider-mask">
-              <div class="hero-slide w-slide">
-                <div class="container-heading-slider">
-                  <div class="whapper-heading-slide">
-                    <div class="overflow">
-                      <div class="sub-heading">
+          <div className="hero-slider w-slider">
+            <div className="hero-slider-mask w-slider-mask">
+              <div className="hero-slide w-slide">
+                <div className="container-heading-slider">
+                  <div className="whapper-heading-slide">
+                    <div className="overflow">
+                      <div className="sub-heading">
                         PLATAFORMA MULTIMÈDIA
                       </div>
-                      <div class="bakground"></div>
+                      <div className="bakground"></div>
 
                     </div>
-                    <div class="overflow">
-                      <div class="heading">
+                    <div className="overflow">
+                      <div className="heading">
                         TREBALLS RECOMANATS
                       </div>
-                      <div class="bakground"></div>
+                      <div className="bakground"></div>
 
                     </div>
                   </div>
-                  <div class="slideRecomanats">
-                    <div class="background-first-slide"></div>
-                    <div class="background-second-slide"></div>
-                    <div class="background-third-slide"></div>
-                    <div class="background-first-slide"></div>
+                  <div className="slideRecomanats">
+                    <div className="background-first-slide"></div>
+                    <div className="background-second-slide"></div>
+                    <div className="background-third-slide"></div>
+                    <div className="background-first-slide"></div>
                   </div>
 
                 </div>
@@ -323,7 +343,7 @@ class CategoryName extends React.Component {
     return (
 
       <a href={'/category/' + info.id}>
-        <h5 class="cursor categoryCard">{info.name}</h5>
+        <h5 className="cursor categoryCard">{info.name}</h5>
       </a>
 
     );
@@ -400,7 +420,7 @@ class UserWorks extends React.Component {
 
 
   componentDidMount() {
-    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/user.php?email="+ this.state.userEmail;
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/user.php?email=" + this.state.userEmail;
     console.log(url);
     console.log(this.state.userEmail);
     fetch(url)
@@ -461,7 +481,7 @@ class WorkDetails extends React.Component {
 
 
   componentDidMount() {
-    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/work.php?id="+ this.state.idWork;
+    let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/work.php?id=" + this.state.idWork;
     console.log(url);
     console.log(this.state.idWork);
     fetch(url)
@@ -488,7 +508,7 @@ class WorkDetails extends React.Component {
 
 class Detail extends React.Component {
   constructor(props) {
-    super();
+    super(props);
   }
 
 
@@ -514,7 +534,10 @@ class Detail extends React.Component {
             <img src={'https://citmalumnes.upc.es/~alexbm1/TFG/img/' + info.imgURL} className="detailsImg" alt={info.name}></img>
           </div>
         </div>
-        <div className="commentContainer"></div>
+        <div className="commentContainer m-1 p-4">
+          <CommentDiv idWorkComment={info.id}></CommentDiv>
+        </div>
+        <AddComment workID={info.id} />
 
 
       </div>
@@ -524,6 +547,137 @@ class Detail extends React.Component {
 
 
 
+
+
+    );
+  }
+}
+
+function AddComment({ workID }) {
+
+
+  let [query, setQuery] = useState('');
+
+  var user = firebase.auth().currentUser;
+  var emailUser;
+  if (user != null) {
+    emailUser = user.email;
+    console.log(emailUser);
+  }
+
+
+
+
+
+  let searchWork = async (e, d, i) => {
+    //.preventDefault();
+    // d.preventDefault();
+    // i.preventDefault();
+
+    //const query="hola";
+    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/addComment.php?idWork=${workID}&comment=${query}&user=${emailUser}`;
+    console.log(url);
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log(data);
+    } catch (er) {
+      console.log(er);
+    }
+
+  }
+  //let work = this.props.workID;
+
+
+
+
+  return (
+    <div>
+
+      <div className="cosPagina">
+        <div className="mx-5 mt-5">
+          <h1 className="pl-3 detailsTitle mb-4">Afegir Comentari</h1>
+          <form onSubmit={searchWork} method="get">
+            <div className="form-row mx-5">
+              <div className="col-md-12 mb-12 my-2">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text borderRadius" id="inputGroupPrepend2">Comentari</span>
+                  </div>
+                  <input type="text" className="form-control borderRadius" id="workName" name="query" value={query} onChange={(e) => setQuery(e.target.value)} required></input>
+                </div>
+              </div>
+            </div>
+            <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton mx-5 p-2" type="button" value="Afegeix" onClick={searchWork} href={workID}>Afegeix</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+
+
+
+
+}
+
+class CommentDiv extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      comments: [],
+
+
+    }
+
+  }
+
+  componentDidMount() {
+    const url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/comment.php?idWorkComment=" + this.props.idWorkComment;
+    console.log(url);
+    console.log(this.props.idWorkComment);
+
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          comments: json.comments
+        });
+      });
+
+  }
+
+
+  render() {
+
+    return (
+      <div >{this.state.comments.map((comment, idx) =>
+        <Comment key={idx} commentContent={comment} />
+      )}
+      </div>
+    );
+  }
+}
+
+class Comment extends React.Component {
+  constructor(props) {
+    super();
+  }
+
+
+  render() {
+    let info = this.props.commentContent;
+
+
+
+    return (
+
+      <div className="comment py-2 px-5 mx-5 my-2">
+        <a href={'/user/' + info.user}>
+          <h5 className="email">{info.user}</h5>
+        </a>
+        <p className="textComment">{info.comment}</p>
+        <p ><small className="text-muted">{info.data}</small></p>
+      </div>
 
 
     );
@@ -564,16 +718,16 @@ class MovieSearch extends React.Component {
 
         <div className="cosPagina">
           <div className="mx-2 mt-5">
-            <div class="row featurette mt-2 px-3">
-              <div class="col-md-1 order-md-1">
-                <a class="btn btn-danger my-4 my-sm-2 navbar-form borderRadius" href="/" type="button" >
+            <div className="row featurette mt-2 px-3">
+              <div className="col-md-1 order-md-1">
+                <a className="btn btn-danger my-4 my-sm-2 navbar-form borderRadius" href="/" type="button" >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
                   </svg>
                  Back</a>
               </div>
-              <div class="col-md-11 order-md-2 vertCenter">
-                <h1 class="results">Results for: {this.props.match.params.query}</h1>
+              <div className="col-md-11 order-md-2 vertCenter">
+                <h1 className="results">Results for: {this.props.match.params.query}</h1>
               </div>
             </div>
           </div>
@@ -598,8 +752,14 @@ function AddWork() {
   let [query, setQuery] = useState('');
   let [description, setDescription] = useState('');
   let [imgURL, setImgURL] = useState('');
-  let [email, setEmail] = useState('');
   let [category, setCategory] = useState('');
+
+  var user = firebase.auth().currentUser;
+  var emailUser;
+  if (user != null) {
+    emailUser = user.email;
+    console.log(emailUser);
+  }
 
   let searchWork = async (e, d, i) => {
     //.preventDefault();
@@ -607,7 +767,7 @@ function AddWork() {
     // i.preventDefault();
 
     //const query="hola";
-    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/addWorks.php?name=${query}&description=${description}&imgUrl=${imgURL}&categoria=${category}&user=${email}`;
+    const url = `https://citmalumnes.upc.es/~alexbm1/TFG/data/addWorks.php?name=${query}&description=${description}&imgUrl=${imgURL}&categoria=${category}&user=${emailUser}`;
     console.log(url);
     try {
       const res = await fetch(url);
@@ -627,7 +787,8 @@ function AddWork() {
 
       <div className="cosPagina">
         <div className="mx-5 mt-5">
-        <h1 className="pl-3 detailsTitle mb-4">Afegir Treball</h1>
+          <h1 className="pl-3 detailsTitle mb-4">Afegir Treball al perfil de l'usuari {emailUser}</h1>
+          
           <form onSubmit={searchWork} method="get">
             <div className="form-row mx-5">
               <div className="col-md-4 mb-12 my-2 p-2">
@@ -666,33 +827,22 @@ function AddWork() {
               <div className="col-md-4 mb-12 my-2 p-2">
                 <div className="input-group">
                   <div className="input-group-prepend">
-                    <span className="input-group-text" id="inputGroupPrepend2">eMail</span>
-                  </div>
-                  <input type="text" className="form-control borderRadius" id="workImgURL" placeholder="alexburdoy@gmail.com" name="email" value={email} onChange={(m) => setEmail(m.target.value)} required></input>
-                </div>
-              </div>
-            </div>
-
-            <div className="form-row mx-5">
-              <div className="col-md-4 mb-12 my-2 p-2">
-                <div className="input-group">
-                  <div className="input-group-prepend">
                     <span className="input-group-text" id="inputGroupPrepend2">Categoria</span>
                   </div>
                   <input type="number" className="form-control borderRadius" id="workImgURL" placeholder="Número Categoria" name="category" value={category} onChange={(c) => setCategory(c.target.value)} required></input>
                 </div>
               </div>
             </div>
-            
-            
-              <a class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton mx-5 p-2" type="button" value="Afegeix" onClick={searchWork} href="/">Afegeix</a>
-            
+
+
+            <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton mx-5 p-2" type="button" value="Afegeix" onClick={searchWork} href="/">Afegeix</a>
+
             <div>
-            <h2 className="pl-3 detailsTitle my-4">Categories</h2>
+              <h2 className="pl-3 detailsTitle my-4">Categories</h2>
               <p className="pl-3 my-4">Programació = 1 | Disseny = 2 | VFX = 3 | 3D = 4</p>
             </div>
             <div>
-            <h2 className="pl-3 detailsTitle my-4">Imatges Disponibles</h2>
+              <h2 className="pl-3 detailsTitle my-4">Imatges Disponibles</h2>
               <p className="pl-3 my-4">programacio.png | disseny.jpg | vfx.jpg | 3d.jpg</p>
             </div>
           </form>
@@ -705,13 +855,6 @@ function AddWork() {
 
 
 }
-
-
-
-
-
-
-
 
 export default App;
 

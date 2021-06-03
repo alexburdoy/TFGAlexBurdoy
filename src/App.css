@@ -79,7 +79,8 @@
   font-weight: 500;
 }
 .detailsImg{
- width: 100%;
+ width: 50%;
+ float: right;
 }
 .detailsTitle{
   font-weight: 700;
@@ -113,6 +114,21 @@ h5{
 }
 .borderRadius{
   border-radius: 0.65em;
+}
+.commentContainer{
+  border-bottom-left-radius: 10em;
+  border-top-left-radius: 10em;
+  border-top-right-radius: 10em;
+  background-color: #fff;
+  color: #000;
+
+}
+.comment{
+  background-color: #282c3417;
+  border-radius: 10em;
+}
+.textComment{
+  color: rgb(28, 28, 32);
 }
 .searchButton{
   width: 5em;

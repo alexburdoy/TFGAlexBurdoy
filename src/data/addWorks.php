@@ -42,3 +42,4 @@ if (!$result2) {
 
 //Cerramos conexión
 $db = NULL;
+?>
