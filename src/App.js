@@ -209,14 +209,14 @@ class WorksList extends React.Component {
                 <div className="container-heading-slider">
                   <div className="whapper-heading-slide">
                     <div className="overflow">
-                      <div className="sub-heading">
+                      <div className="sub-heading font-face-bnThin">
                         PLATAFORMA MULTIMÈDIA
                       </div>
                       <div className="bakground"></div>
 
                     </div>
                     <div className="overflow">
-                      <div className="heading">
+                      <div className="heading font-face-bnReg">
                         TREBALLS RECOMANATS
                       </div>
                       <div className="bakground"></div>
