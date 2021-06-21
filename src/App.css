@@ -266,7 +266,7 @@ h5{
   -webkit-transform: translate(-95px, 0px);
   -ms-transform: translate(-95px, 0px);
   transform: translate(-95px, 0px);
-  font-family: 'Bebas Neue', sans-serif;
+  
   color: transparent;
   font-size: 80vh;
   line-height: 1;
@@ -408,7 +408,6 @@ h5{
 }
 .sub-heading {
   margin-left: 4px;
-  font-family: 'Bebas Neue', sans-serif;
   color: hsla(0, 0%, 100%, 0.84);
   font-size: 7em;
   font-weight: 100;

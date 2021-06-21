@@ -22,18 +22,30 @@ const SignUp = ({ history }) => {
   }, [history]);
 
   return (
-    <div>
-      <h1>Sign up</h1>
+    <div className="m-5 p-5">
+      <h1 className="py-3 detailsTitle ">Sign up</h1>
       <form onSubmit={handleSignUp}>
-        <label>
-          Email
-          <input name="email" type="email" placeholder="Email" />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" placeholder="Password" />
-        </label>
-        <button type="submit">Sign Up</button>
+      <div className="form-row ">
+                    <div className="col-md-4 mb-12 my-2">
+                        <div className="input-group">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text borderRadius" id="inputGroupPrepend2">Email</span>
+                            </div>
+                            <input type="email" className="form-control borderRadius" id="email" name="email" required></input>
+                        </div>
+                    </div>
+                    <div className="form-row px-1">
+                        <div className="col-md-12 my-2 ">
+                            <div className="input-group">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text borderRadius" id="inputGroupPrepend2">Password</span>
+                                </div>
+                                <input type="password" className="form-control borderRadius" id="password" name="password" required></input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button className="btn btn-info" type="submit">Sign Up</button>
       </form>
     </div>
   );

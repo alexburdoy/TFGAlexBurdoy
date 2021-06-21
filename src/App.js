@@ -14,12 +14,6 @@ import PrivateRoute from "./PrivateRoute";
 import Login from "./Login";
 import SignUp from "./SignUp";
 
-/*
-<form className="form-inline" action={"https://citmalumnes.upc.es/~alexbm1/TFG/data/cercaWorks.php"} method={'GET'}>
-  <input class="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="query" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
-  <input class="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="submit" value="Search"></input>
-</form>
-*/
 function App() {
 
   const [query, setQuery] = useState('');
@@ -200,8 +194,8 @@ class WorksList extends React.Component {
       <div>
         <div id='hero' className="hero-section">
           <div className="wrapper-move-heading">
-            <h1 className="hero-heading second">PORTAFOLIS </h1>
-            <h1 className="hero-heading second">  PORTAFOLIS</h1>
+            <h1 className="hero-heading second font-face-bnReg">PORTAFOLIS </h1>
+            <h1 className="hero-heading second font-face-bnReg">  PORTAFOLIS</h1>
           </div>
           <div className="hero-slider w-slider">
             <div className="hero-slider-mask w-slider-mask">
