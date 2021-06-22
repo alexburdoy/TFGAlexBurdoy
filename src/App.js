@@ -58,9 +58,9 @@ function App() {
 
             <form className="form-inline" onSubmit={searchWork}>
 
-              <input className="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="workSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search"></input>
+              <input className="form-control mr-sm-2 navbar-form borderRadius" type="search" aria-label="Search" id="workSearch" name="query" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Cerca Treballs"></input>
 
-              <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/workSearch/' + query}>Search</a>
+              <a className="btn btn-outline-info my-2 my-sm-0 navbar-form searchButton" type="button" value="Search" href={'/workSearch/' + query}>Cerca</a>
 
 
             </form>
@@ -357,11 +357,18 @@ class CategoryWorks extends React.Component {
 
 
   componentDidMount() {
-    let url2 = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat.php?name=" + this.state.idCategory + ".php";
+    let url2 = "https://citmalumnes.upc.es/~alexbm1/TFG/data/namecat.php?name=" + this.state.idCategory;
     let url = "https://citmalumnes.upc.es/~alexbm1/TFG/data/category.php?id=" + this.state.idCategory;
     console.log(url);
     console.log(url2);
     console.log(this.state.idCategory);
+    fetch(url2)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({
+          categories: json.categories,
+        });
+      });
     fetch(url)
       .then(response => response.json())
       .then(json => {
@@ -370,13 +377,7 @@ class CategoryWorks extends React.Component {
         });
       });
 
-    fetch(url2)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({
-          categories: json.categories,
-        });
-      });
+    
 
   }
 
@@ -716,7 +717,7 @@ class MovieSearch extends React.Component {
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
                   </svg>
-                 Back</a>
+                  Back</a>
               </div>
               <div className="col-md-11 order-md-2 vertCenter">
                 <h1 className="results">Results for: {this.props.match.params.query}</h1>
@@ -810,7 +811,13 @@ function AddWork() {
                   <div className="input-group-prepend">
                     <span className="input-group-text" id="inputGroupPrepend2">URL Imatge</span>
                   </div>
-                  <input type="text" className="form-control borderRadius" id="workImgURL" placeholder="foto.jpg" name="imgURL" value={imgURL} onChange={(i) => setImgURL(i.target.value)} required></input>
+                  <select className="form-control borderRadius" id="workImgURL" name="imgURL" value={imgURL} onChange={(i) => setImgURL(i.target.value)} required>
+                    <option>programacio.png</option>
+                    <option>disseny.jpg</option>
+                    <option>vfx.jpg</option>
+                    <option>3d.jpg</option>
+                  </select>
+
                 </div>
               </div>
             </div>
